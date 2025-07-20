@@ -7,7 +7,7 @@ rawset(shared, "__SCRIPT_ALREADY_EXECUTED__", true)
 
 -- Load external scripts with error handling
 local success1, error1 = pcall(function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/namnnni2/Grow-a-garden/refs/heads/main/GrowaGarden"))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Eirikplrs/Grow-a-garden/refs/heads/main/Gag"))()
 end)
 if not success1 then
     warn("Failed to load GrowaGarden script: " .. tostring(error1))
